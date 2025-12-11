@@ -10,10 +10,27 @@
         <link href="css/style.css" rel="stylesheet">
 
         <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.49/Tone.js"></script>
-        <script src="/js/music.js" defer></script>
+        <script src="/js/iltn.js" defer></script>
     </head>
     <body>
-        <button type="button" id="watch">watch</button>
-        <button type="button" id="play">play</button>
+        <div id="lobby">
+            <h1>Select a Room</h1>
+            <div id="room-list">
+                <p>Loading rooms...</p>
+            </div>
+            
+            <hr>
+            <h3>Or create one:</h3>
+            <input type="text" id="room-input" placeholder="Room Name">
+            <button type="button" id="create-room-btn">Create & Join</button>
+        </div>
+
+        <div id="game-mode" style="display: none;">
+            <h2 id="current-room-name"></h2>
+            <button type="button" id="watch">watch</button>
+            <button type="button" id="play">play</button>
+            <button type="button" id="leave">Leave Room</button>
+        </div>
+
     </body>
 </html>
