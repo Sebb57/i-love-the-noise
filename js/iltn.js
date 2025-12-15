@@ -1,5 +1,12 @@
 const ws = new WebSocket(`ws://${window.location.hostname}:8080`);
-const synth = new Tone.PolySynth(Tone.Synth).toDestination();
+let synth = new Tone.PolySynth(Tone.Synth).toDestination();
+
+const instrumentSelect = document.getElementById('instruments');
+instrumentSelect.addEventListener('change', () => {
+    const instrumentName = instrumentSelect.value;
+    synth.dispose();
+    synth = new Tone.PolySynth(Tone[instrumentName]).toDestination();
+});
 
 let isConnected = false;
 let isAudioEnabled = false;
