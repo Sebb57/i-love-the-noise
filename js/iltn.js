@@ -1,4 +1,4 @@
-const ws = new WebSocket(`ws://${window.location.hostname}:8080`);
+const ws = new WebSocket(`wss://i-love-the-noise.onrender.com`);
 let synth = new Tone.PolySynth(Tone.Synth).toDestination();
 
 const instrumentSelect = document.getElementById('instruments');
@@ -83,7 +83,7 @@ const renderRoomList = (rooms) => {
         const btn = document.createElement('button');
         btn.textContent = `Join ${roomName}`;
         btn.onclick = () => {
-            location.reload()
+            // location.reload()
             ws.send(JSON.stringify({ type: "join", room: roomName }));
         };
         li.appendChild(btn);
