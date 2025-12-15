@@ -10,7 +10,6 @@ instrumentSelect.addEventListener('change', () => {
 
 let isConnected = false;
 let isAudioEnabled = false;
-let currentRoom = null;
 
 const notes = {
     'a': 'C4',
@@ -46,7 +45,12 @@ window.addEventListener("keydown", async (event) => {
 });
 
 ws.onopen = () => {
-    ws.send(JSON.stringify({ type: "get_rooms" }));
+    var room = sessionStorage.getItem("room");
+    if (room) {
+        enterGameMode(room)
+    } else {
+        ws.send(JSON.stringify({ type: "get_rooms" }));
+    }
 };
 
 ws.onmessage = async (event) => {
@@ -56,7 +60,6 @@ ws.onmessage = async (event) => {
             renderRoomList(data.rooms);
             break;
         case "joined":
-            console.log("Joined room:", data.room);
             enterGameMode(data.room);
             break;
         case "note":
@@ -80,6 +83,7 @@ const renderRoomList = (rooms) => {
         const btn = document.createElement('button');
         btn.textContent = `Join ${roomName}`;
         btn.onclick = () => {
+            location.reload()
             ws.send(JSON.stringify({ type: "join", room: roomName }));
         };
         li.appendChild(btn);
@@ -89,7 +93,7 @@ const renderRoomList = (rooms) => {
 };
 
 const enterGameMode = (roomName) => {
-    currentRoom = roomName;
+    sessionStorage.setItem("room", roomName);
     roomTitle.textContent = `Room: ${roomName}`;
     lobbyView.style.display = 'none';
     gameView.style.display = 'block';
@@ -97,7 +101,7 @@ const enterGameMode = (roomName) => {
 };
 
 const leaveGameMode = () => {
-    currentRoom = null;
+    sessionStorage.removeItem("room");
     lobbyView.style.display = 'block';
     gameView.style.display = 'none';
     ws.send(JSON.stringify({ type: "get_rooms" }));
@@ -151,5 +155,6 @@ watch_button.onclick = async () => {
 };
 
 leave_button.onclick = () => {
-    location.reload(); 
+    leaveGameMode();
+    location.reload();
 };
